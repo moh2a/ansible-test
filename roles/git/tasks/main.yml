@@ -1,0 +1,14 @@
+---
+# tasks file for gitlab
+- name: "Install the git"
+  yum:
+    name: "git"
+    state: "present"
+  become: true
+
+- name: "clone repository"
+  become: true
+  become_user: "user-ansible"
+  git:
+    repo: 'https://github.com/karthequian/docker-helloworld.git'
+    dest: "{{ path_of_app }}"

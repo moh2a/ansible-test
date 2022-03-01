@@ -1,0 +1,8 @@
+---
+- hosts: nodes
+  vars:
+    path_of_app: /home/user-ansible/hello-world
+  roles:
+    - role: git
+    - role: "docker"
+      become: yes

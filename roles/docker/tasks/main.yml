@@ -1,0 +1,50 @@
+---
+# Install the yum-utils package  (which provides the yum-config-manager utility) and set up the stable repository.
+- name: "Install the yum-utils package "
+  yum:
+    name: "yum-utils"
+    state: "present"
+
+- name: "Install the yum-utils package "
+  yum_repository:
+    name: docker-ce-stable
+    description: docker-ce YUM repo
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    gpgcheck: yes
+
+- name: "Install python-docker"
+  yum:
+    name: python-docker
+    state: "present"
+
+- name: "Install docker-ce, docker-ce-cli and containerd.io"
+  yum:
+    name:
+      - "docker-ce"
+      - "docker-ce-cli"
+      - "containerd.io"
+    state: "present"
+
+#2. Cette tâche active le service docker
+- name: "docker service activation"
+  service:
+    name: "docker"
+    state: "started"
+    enabled: yes
+
+- name: Build an image
+  community.docker.docker_image:
+    build:
+      path: "{{ path_of_app }}"
+    name: application
+    tag: v1
+    source: build
+
+- name: application container
+  docker_container:
+    name: application
+    image: application:v1
+    state: started
+    ports:
+      - "8080:80"

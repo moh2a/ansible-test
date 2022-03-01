@@ -1,0 +1,23 @@
+---
+# tasks file for login
+- name: "Login to the api"
+  uri:
+    url: "{{ url }}"
+    method: POST
+    body_format: form-urlencoded
+    return_content: yes
+    body_format: json
+    headers:
+      Content-Type: application/json
+    body:
+      uid: "{{ uid }}"
+      password: "{{ password }}"
+  register: result_login
+# - name: Call test
+#   uri:
+#     url: "{{ url }}"
+#     method: GET
+#     return_content: yes
+- name: Print result
+  ansible.builtin.debug:
+    msg: le resultat est  {{ result_login }} 
